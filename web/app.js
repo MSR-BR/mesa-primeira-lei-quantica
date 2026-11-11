@@ -417,22 +417,69 @@ async function requestSectionReview() {
     if(activeSection.path!==section || $('#section-source').value!==source) throw new Error('O texto do formulário mudou durante a revisão. Solicite novamente para comparar a versão atual.');
     reviewResult=result; $('#review-original').textContent=source; $('#review-proposed').textContent=result.revised;
     $('#review-diff').innerHTML=coloredDiff(source,result.revised); $('#review-reason').textContent=result.summary;
-    $('#section-comparison').hidden=false; $('#accept-review').hidden=false;
+    $('#section-comparison').hidden=false; $('#accept-review').hidden=false; $('#accept-review').focus();
     $('#section-feedback').textContent='Confira a comparação. Aceitar coloca a proposta no campo de edição; salvar publica uma nova versão.';
   } catch(error) { $('#section-feedback').textContent=error.message; }
   finally {reviewBusy=false; $('#review-section').disabled=false; $('#save-section').disabled=false;}
 }
+async function saveWithReference(path, source, branch, entry, message) {
+  const key = /^@(?!string\b|preamble\b|comment\b)\w+\s*\{\s*([A-Za-z0-9_.:+/-]+)\s*,/i.exec(entry)?.[1];
+  if (!key) throw new Error('Cole uma entrada BibTeX com uma chave válida.');
+  let depth = 0;
+  const start = entry.indexOf('{');
+  for (let i = start; i < entry.length; i++) {
+    if (entry[i] === '\\') { i++; continue; }
+    if (entry[i] === '{') depth++;
+    if (entry[i] === '}' && --depth === 0 && i !== entry.length - 1)
+      throw new Error('Cole uma entrada BibTeX por salvamento.');
+  }
+  if (depth !== 0 || !entry.endsWith('}')) throw new Error('Confira as chaves da entrada BibTeX.');
+  const ref = 'git/refs/heads/' + encodeURIComponent(branch);
+  const head = (await gh(ref)).object.sha;
+  const at = '?ref=' + head;
+  const bibPath = 'article/references.bib';
+  const [commit, section, bibliography] = await Promise.all([
+    gh('git/commits/' + head), gh('contents/' + path + at), gh('contents/' + bibPath + at)
+  ]);
+  if (section.sha !== baseSha) throw new Error('A seção mudou no GitHub. Reabra o editor antes de salvar.');
+  const bib = decodeText(bibliography.content);
+  const keys = [...bib.matchAll(/@\w+\s*[{(]\s*([^,\s]+)\s*,/g)].map(item => item[1]);
+  if (keys.includes(key) && !bib.includes(entry)) throw new Error('Já existe uma referência com a chave ' + key + '.');
+  const tree = [{path, mode:'100644', type:'blob', content:source}];
+  if (!keys.includes(key)) tree.push({path:bibPath, mode:'100644', type:'blob', content:bib.trimEnd() + '\n\n' + entry + '\n'});
+  const write = (endpoint, method, data) => gh(endpoint, {method, body:JSON.stringify(data)});
+  const nextTree = await write('git/trees', 'POST', {base_tree:commit.tree.sha, tree});
+  const next = await write('git/commits', 'POST', {message, tree:nextTree.sha, parents:[head]});
+  const saved = await gh('contents/' + path + '?ref=' + next.sha);
+  await write(ref, 'PATCH', {sha:next.sha, force:false});
+  return {content:{sha:saved.sha}};
+}
 async function saveSection() {
-  if(!baseSha || reviewBusy) return;
+  if (reviewBusy) return;
+  if (!baseSha) {
+    $('#section-feedback').textContent = 'Reabra o editor para carregar a versão atual antes de salvar.';
+    return;
+  }
+  if (reviewResult) {
+    $('#section-feedback').textContent = 'Aceite ou descarte a proposta da IA antes de salvar.';
+    $('#accept-review').focus();
+    return;
+  }
   $('#save-section').disabled=true;
   try {
     const body = $('#section-source').value;
     if (activeSection.range && latexBlocks(body).length !== latexBlocks(originalText).length)
       throw new Error('Preserve a estrutura de seções ao editar este trecho.');
     const updatedSource=activeSection.range
-      ? sourceDocument.slice(0, activeSection.range.start) + '\\n' + body.trim() + '\\n\\n' + sourceDocument.slice(activeSection.range.end)
+      ? sourceDocument.slice(0, activeSection.range.start) + body.trim() + '\n\n' + sourceDocument.slice(activeSection.range.end)
       : activeSection.fragment==='abstract'?replaceAbstract(sourceDocument,$('#section-source').value):$('#section-source').value;
-    const result=await gh(`contents/${activeSection.path}`,{method:'PUT',body:JSON.stringify({message:`Atualizar seção: ${activeSection.title}`,content:encodeText(updatedSource),sha:baseSha,branch:workspace.branch||'main'})});
+    const entry = $('#manual-references').value.trim();
+    const branch = workspace.branch || 'main';
+    const path = activeSection.path;
+    const message = 'Atualizar seção: ' + activeSection.title;
+    const result = /^@\w+\s*[{(]/.test(entry)
+      ? await saveWithReference(path, updatedSource, branch, entry, message + ' e bibliografia')
+      : await gh('contents/' + path, {method:'PUT',body:JSON.stringify({message,content:encodeText(updatedSource),sha:baseSha,branch})});
     baseSha=result.content.sha; sourceDocument=updatedSource; originalText=$('#section-source').value;
     if (activeSection.range) activeSection.range = blockRange(updatedSource, activeSection.block);
     $('#section-feedback').textContent='Seção salva. Recarregue a mesa após a publicação da alteração.';
@@ -448,7 +495,7 @@ function setupSectionReview() {
  $('#section-editor').addEventListener('cancel',event=>{if(reviewBusy)event.preventDefault();});
  $('#research-search').onclick=searchResearchStarter;
  $('#review-section').onclick=requestSectionReview; $('#save-section').onclick=saveSection;
- $('#accept-review').onclick=()=>{if(reviewResult){$('#section-source').value=reviewResult.revised;$('#accept-review').hidden=true;$('#section-feedback').textContent='Sugestão aplicada ao formulário. Você pode ajustar o texto antes de salvar.';}};
+ $('#accept-review').onclick=()=>{if(reviewResult){$('#section-source').value=reviewResult.revised;reviewResult=null;$('#section-comparison').hidden=true;$('#accept-review').hidden=true;$('#save-section').focus();$('#section-feedback').textContent='Sugestão aplicada ao formulário. Você pode ajustar o texto antes de salvar.';}};
  $('#discard-review').onclick=()=>{reviewResult=null;$('#section-comparison').hidden=true;$('#accept-review').hidden=true;};
 }
 

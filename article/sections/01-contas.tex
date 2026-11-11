@@ -6,7 +6,7 @@
 \newcommand{\dd}{\mathrm d}
 \newcommand{\ii}{\mathrm i}
 \section{Definições e propagador}
-\nConsideramos $H(t)=H_0+\lambda V(t)$, com $H_0=H_0^\dagger$ independente do tempo,
+Consideramos $H(t)=H_0+\lambda V(t)$, com $H_0=H_0^\dagger$ independente do tempo,
 $V(t)=V^\dagger(t)$ e $\lambda$ real e adimensional. As bases
 $\{\ket n\}$ e $\{\ket k\}$ são fixas, independentes de $\lambda$ e
 não precisam coincidir:
@@ -31,7 +31,46 @@ Integrando sucessivamente a equação de movimento
  V_I(t_1)V_I(t_2)+O(\lambda^3).
  \label{eq:Dyson}
 \end{align}
-O produto mantém a ordenação temporal: $t_1\geq t_2$.\n\n\section{Módulo quadrado até segunda ordem}
+O produto mantém a ordenação temporal: $t_1\geq t_2$.
+
+\section{Coeficientes da amplitude}
+Mantendo a definição do original,
+\begin{equation}
+ c_{nk}(t)=\bra n U_I(t)\ket k
+ =c_{nk}^{(0)}+\lambda c_{nk}^{(1)}(t)
+ +\lambda^2c_{nk}^{(2)}(t)+O(\lambda^3).
+ \label{eq:cseries}
+\end{equation}
+Tomando os elementos de matriz da Eq.~\eqref{eq:Dyson},
+\begin{align}
+ c_{nk}^{(0)}&=S_{nk},\label{eq:c0}\\
+ c_{nk}^{(1)}(t)&=-\frac{\ii}{\hbar}
+   \int_0^t\bra n V_I(t_1)\ket k\,\dd t_1,\label{eq:c1}\\
+ c_{nk}^{(2)}(t)&=-\frac{1}{\hbar^2}
+   \int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+   \bra n V_I(t_1)V_I(t_2)\ket k.\label{eq:c2}
+\end{align}
+Para calcular a segunda ordem diretamente pelos elementos do potencial,
+inserimos $\I=\sum_\ell\ket\ell\bra\ell$:
+\begin{equation}
+ c_{nk}^{(2)}(t)=-\frac{1}{\hbar^2}\sum_\ell
+ \int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+ \bra n V_I(t_1)\ket\ell\bra\ell V_I(t_2)\ket k.
+ \label{eq:c2sum}
+\end{equation}
+Se todos os elementos do potencial estiverem escritos na base de $H_0$,
+usamos
+\begin{equation}
+ V^I_{ab}(t)=e^{\ii(\epsilon_a-\epsilon_b)t/\hbar}V^S_{ab}(t),
+ \qquad \bra\ell V_I(t)\ket k=\sum_a V^I_{\ell a}(t)S_{ak},
+ \label{eq:phase}
+\end{equation}
+com $V^S_{ab}(t)=\bra a V(t)\ket b$.
+Não se impõe $S_{nk}=\delta_{nk}$, salvo quando as bases coincidem.
+Os coeficientes $c_{nk}^{(j)}$ não incluem os fatores $\lambda^j$.
+
+\newpage
+\section{Módulo quadrado até segunda ordem}
 Definimos
 \begin{equation}
  p_{nk}(t):=|c_{nk}(t)|^2
