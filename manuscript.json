@@ -18,7 +18,15 @@
     {
       "id": "4",
       "title": "Metodologia",
-      "blocks": []
+      "blocks": [
+        {
+          "title": "Definições e propagador",
+          "source": "Consideramos $H(t)=H_0+\\lambda V(t)$, com $H_0=H_0^\\dagger$ independente do tempo,\n$V(t)=V^\\dagger(t)$ e $\\lambda$ real e adimensional. As bases\n$\\{\\ket n\\}$ e $\\{\\ket k\\}$ são fixas, independentes de $\\lambda$ e\nnão precisam coincidir:\n\\begin{equation}\n H_0\\ket n=\\epsilon_n\\ket n,\\qquad\n \\rho(0)=\\sum_k r_k^0\\ket k\\bra k,\\qquad S_{nk}=\\langle n|k\\rangle.\n \\label{eq:bases}\n\\end{equation}\nNa representação de interação,\n\\begin{equation}\n V_I(t)=e^{\\ii H_0t/\\hbar}V(t)e^{-\\ii H_0t/\\hbar},\\qquad\n \\ii\\hbar\\dot U_I=\\lambda V_IU_I,\\qquad U_I(0)=\\I.\n \\label{eq:evolution}\n\\end{equation}\nIntegrando sucessivamente a equação de movimento\n(série de Dyson~\\cite{Reis2025Quantum}), obtemos\n\\begin{align}\n U_I(t)={}&\\I-\\frac{\\ii\\lambda}{\\hbar}\\int_0^t V_I(t_1)\\,\\dd t_1\n \\nonumber\\\\\n &-\\frac{\\lambda^2}{\\hbar^2}\n \\int_0^t\\dd t_1\\int_0^{t_1}\\dd t_2\\,\n V_I(t_1)V_I(t_2)+O(\\lambda^3).\n \\label{eq:Dyson}\n\\end{align}\nO produto mantém a ordenação temporal: $t_1\\geq t_2$.",
+          "analysisVersion": "r9.1-38182368",
+          "manualReferences": "",
+          "researchReferences": []
+        }
+      ]
     },
     {
       "id": "5",
