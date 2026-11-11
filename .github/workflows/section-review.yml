@@ -1,0 +1,50 @@
+name: Revisar seção no formulário
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        required: true
+        type: string
+      section:
+        required: true
+        type: string
+      source:
+        required: false
+        type: string
+      base_sha:
+        required: true
+        type: string
+      focus:
+        required: false
+        type: string
+      mode:
+        type: string
+      topic:
+        type: string
+      references:
+        type: string
+      block_title:
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: section-reviews
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Revisar somente a seção solicitada
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4' }}
+          RESEARCH_STARTER_API_KEY: ${{ secrets.RESEARCH_STARTER_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/section_review.py

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "generatorVersion": "2.2.0",
+  "repository": "MSR-BR/mesa-primeira-lei-quantica",
+  "branch": "main",
+  "title": "Expansão perturbativa da primeira lei",
+  "theme": "Termodinâmica quântica",
+  "shortTitle": "PRIMEIRA LEI QUÂNTICA",
+  "subtitle": "Calor, trabalho e energia coerente até segunda ordem",
+  "authors": [
+    "Mario Reis",
+    "Maron F. Anka",
+    "Vinicius Gomes de Paula",
+    "Clebson Cruz"
+  ],
+  "reviewModel": "gpt-5.4",
+  "reviewGuidance": "",
+  "authUrl": ""
+}

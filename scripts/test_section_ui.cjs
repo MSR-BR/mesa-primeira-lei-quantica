@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const code=fs.readFileSync(require('path').join(__dirname,'../web/app.js'),'utf8').replace('init();','');
+const elements=new Map();const element=()=>({value:'',textContent:'',innerHTML:'',hidden:false,disabled:false,showModal(){},close(){},addEventListener(){},removeAttribute(){}});
+const document={querySelector:s=>{if(!elements.has(s))elements.set(s,element());return elements.get(s)},querySelectorAll:()=>[]};
+const context=vm.createContext({document,TextEncoder,TextDecoder,Uint8Array,btoa,atob,crypto:require('crypto').webcrypto,location:{},setTimeout:fn=>fn(),fetch:async()=>{},console});
+vm.runInContext(code,context);
+vm.runInContext(`workspace={repository:'owner/article',sections:[{title:'Intro',path:'article/sections/intro.tex'}]};accessToken='test';`,context);
+let calls=[];
+context.fetch=async(url,opts)=>{calls.push({url,opts});if(opts.method==='PUT')return{ok:false,status:409};return{ok:true,status:200,json:async()=>({sha:'a'.repeat(40),content:btoa('Original text')})};};
+(async()=>{await vm.runInContext("openSection('article/sections/intro.tex')",context);assert.equal(elements.get('#section-source').value,'Original text');await vm.runInContext('saveSection()',context);assert.match(elements.get('#section-feedback').textContent,/mudou/);assert.equal(JSON.parse(calls.at(-1).opts.body).sha,'a'.repeat(40));assert.match(vm.runInContext("coloredDiff('<old>', '<new>')",context),/&lt;/);assert(!vm.runInContext("coloredDiff('<script>', 'x')",context).includes('<script>'));console.log('PASS: load live source, optimistic conflict, UTF8 and escaped color comparison');})();

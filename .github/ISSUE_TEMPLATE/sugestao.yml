@@ -1,0 +1,22 @@
+name: Sugestão para o artigo
+description: Proponha uma alteração ou registre uma decisão dos autores.
+title: '[Sugestão] '
+body:
+  - type: input
+    id: section
+    attributes:
+      label: Seção do artigo
+      placeholder: Ex.: Introduction, Method, Discussion
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta e justificativa
+      description: Inclua o trecho atual, a mudança proposta e o motivo.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão consultada

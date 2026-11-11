@@ -1,0 +1,44 @@
+{
+  "sections": [
+    {
+      "id": "1",
+      "title": "Abstract",
+      "blocks": []
+    },
+    {
+      "id": "2",
+      "title": "Introdução",
+      "blocks": []
+    },
+    {
+      "id": "3",
+      "title": "Estado da arte",
+      "blocks": []
+    },
+    {
+      "id": "4",
+      "title": "Metodologia",
+      "blocks": []
+    },
+    {
+      "id": "5",
+      "title": "Resultados",
+      "blocks": []
+    },
+    {
+      "id": "6",
+      "title": "Discussão",
+      "blocks": []
+    },
+    {
+      "id": "7",
+      "title": "Conclusão",
+      "blocks": []
+    },
+    {
+      "id": "8",
+      "title": "Referências",
+      "blocks": []
+    }
+  ]
+}

@@ -1,0 +1,525 @@
+% Mesa: Contas até segunda ordem
+\newcommand{\ket}[1]{\lvert #1\rangle}
+\newcommand{\bra}[1]{\langle #1\rvert}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\I}{\mathbb I}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\ii}{\mathrm i}
+\section{Definições e propagador}
+Consideramos $H(t)=H_0+\lambda V(t)$, com $H_0=H_0^\dagger$ independente do tempo,
+$V(t)=V^\dagger(t)$ e $\lambda$ real e adimensional. As bases
+$\{\ket n\}$ e $\{\ket k\}$ são fixas, independentes de $\lambda$ e
+não precisam coincidir:
+\begin{equation}
+ H_0\ket n=\epsilon_n\ket n,\qquad
+ \rho(0)=\sum_k r_k^0\ket k\bra k,\qquad S_{nk}=\langle n|k\rangle.
+ \label{eq:bases}
+\end{equation}
+Na representação de interação,
+\begin{equation}
+ V_I(t)=e^{\ii H_0t/\hbar}V(t)e^{-\ii H_0t/\hbar},\qquad
+ \ii\hbar\dot U_I=\lambda V_IU_I,\qquad U_I(0)=\I.
+ \label{eq:evolution}
+\end{equation}
+Integrando sucessivamente a equação de movimento
+(série de Dyson~\cite{MIT2017Dyson}), obtemos
+\begin{align}
+ U_I(t)={}&\I-\frac{\ii\lambda}{\hbar}\int_0^t V_I(t_1)\,\dd t_1
+ \nonumber\\
+ &-\frac{\lambda^2}{\hbar^2}
+ \int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+ V_I(t_1)V_I(t_2)+O(\lambda^3).
+ \label{eq:Dyson}
+\end{align}
+O produto mantém a ordenação temporal: $t_1\geq t_2$.
+
+\section{Coeficientes da amplitude}
+Mantendo a definição do original,
+\begin{equation}
+ c_{nk}(t)=\bra n U_I(t)\ket k
+ =c_{nk}^{(0)}+\lambda c_{nk}^{(1)}(t)
+ +\lambda^2c_{nk}^{(2)}(t)+O(\lambda^3).
+ \label{eq:cseries}
+\end{equation}
+Tomando os elementos de matriz da Eq.~\eqref{eq:Dyson},
+\begin{align}
+ c_{nk}^{(0)}&=S_{nk},\label{eq:c0}\\
+ c_{nk}^{(1)}(t)&=-\frac{\ii}{\hbar}
+   \int_0^t\bra n V_I(t_1)\ket k\,\dd t_1,\label{eq:c1}\\
+ c_{nk}^{(2)}(t)&=-\frac{1}{\hbar^2}
+   \int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+   \bra n V_I(t_1)V_I(t_2)\ket k.\label{eq:c2}
+\end{align}
+Para calcular a segunda ordem diretamente pelos elementos do potencial,
+inserimos $\I=\sum_\ell\ket\ell\bra\ell$:
+\begin{equation}
+ c_{nk}^{(2)}(t)=-\frac{1}{\hbar^2}\sum_\ell
+ \int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+ \bra n V_I(t_1)\ket\ell\bra\ell V_I(t_2)\ket k.
+ \label{eq:c2sum}
+\end{equation}
+Se todos os elementos do potencial estiverem escritos na base de $H_0$,
+usamos
+\begin{equation}
+ V^I_{ab}(t)=e^{\ii(\epsilon_a-\epsilon_b)t/\hbar}V^S_{ab}(t),
+ \qquad \bra\ell V_I(t)\ket k=\sum_a V^I_{\ell a}(t)S_{ak},
+ \label{eq:phase}
+\end{equation}
+com $V^S_{ab}(t)=\bra a V(t)\ket b$.
+Não se impõe $S_{nk}=\delta_{nk}$, salvo quando as bases coincidem.
+Os coeficientes $c_{nk}^{(j)}$ não incluem os fatores $\lambda^j$.
+
+\newpage
+\section{Módulo quadrado até segunda ordem}
+Definimos
+\begin{equation}
+ p_{nk}(t):=|c_{nk}(t)|^2
+ =p_{nk}^{(0)}+\lambda p_{nk}^{(1)}(t)
+ +\lambda^2p_{nk}^{(2)}(t)+O(\lambda^3).
+ \label{eq:pseries}
+\end{equation}
+Multiplicando a amplitude pelo seu conjugado e mantendo somente
+termos de grau total até dois,
+\begin{align}
+ |c_{nk}|^2={}&|c_{nk}^{(0)}|^2
+ +\lambda\big[c_{nk}^{(0)*}c_{nk}^{(1)}
+              +c_{nk}^{(0)}c_{nk}^{(1)*}\big]\nonumber\\
+ &+\lambda^2\big[|c_{nk}^{(1)}|^2
+              +c_{nk}^{(0)*}c_{nk}^{(2)}
+              +c_{nk}^{(0)}c_{nk}^{(2)*}\big]+O(\lambda^3).
+ \label{eq:product}
+\end{align}
+Portanto, os três coeficientes necessários às expansões seguintes são
+\begin{equation}
+ \boxed{\begin{aligned}
+ p_{nk}^{(0)}&=|S_{nk}|^2,\\
+ p_{nk}^{(1)}&=2\operatorname{Re}\!\left(S_{nk}^*c_{nk}^{(1)}\right),\\
+ p_{nk}^{(2)}&=|c_{nk}^{(1)}|^2+
+ \textcolor{blue}{2\operatorname{Re}\!\left(S_{nk}^*c_{nk}^{(2)}\right)}.
+ \end{aligned}}
+ \label{eq:porders}
+\end{equation}
+O termo azul completa a segunda ordem; não pode ser omitido em geral.
+Substituindo as Eqs.~\eqref{eq:c1}--\eqref{eq:c2},
+\begin{align}
+ p_{nk}^{(1)}(t)
+ &=\frac{2}{\hbar}\operatorname{Im}\!\left[
+ S_{nk}^*\int_0^t\bra n V_I(s)\ket k\,\dd s\right],\label{eq:p1potential}\\
+ p_{nk}^{(2)}(t)
+ &=\frac{1}{\hbar^2}
+   \left|\int_0^t\bra n V_I(s)\ket k\,\dd s\right|^2\nonumber\\
+ &\quad-\frac{2}{\hbar^2}\operatorname{Re}\!\left[
+ S_{nk}^*\int_0^t\dd t_1\int_0^{t_1}\dd t_2\,
+ \bra n V_I(t_1)V_I(t_2)\ket k\right].\label{eq:p2potential}
+\end{align}
+A unitariedade assegura, ordem a ordem,
+\begin{equation}
+ \sum_n p_{nk}^{(0)}=1,\qquad
+ \sum_n p_{nk}^{(1)}=\sum_n p_{nk}^{(2)}=0.
+ \label{eq:normalization}
+\end{equation}
+A expansão é usada a tempo fixo e para
+$|\lambda|\int_0^t\|V_I(s)\|\,\dd s/\hbar\ll1$.
+
+\paragraph{Continuação.}
+Os coeficientes acima usam a base fixa de $H_0$.
+A seção seguinte conecta esse cálculo à base espectral do Hamiltoniano
+físico antes de expandir as três contribuições energéticas.
+
+
+% !TEX root = main.tex
+\section{Bases espectrais para a energia física}
+Usaremos o Hamiltoniano completo $H(t)=H_0+\lambda V(t)$ na energia
+interna, $\mathcal U=\Tr(\rho H)$.
+Sejam suas decomposições espectrais, na representação de Schrödinger,
+\begin{equation}
+ H=\sum_n E_n\ket{e_n}\bra{e_n},\qquad
+ \rho=\sum_k r_k\ket{\phi_k}\bra{\phi_k}.
+ \label{eq:spectra}
+\end{equation}
+Os $r_k$ são \emph{autovalores} da densidade, não suas populações em
+uma base fixa. Para distinguir os overlaps físicos dos coeficientes
+$c_{nk}$ já calculados, definimos
+\begin{equation}
+ d_{nk}:=\langle e_n|\phi_k\rangle,\qquad
+ \pi_{nk}:=|d_{nk}|^2,\qquad
+ \mathcal U=\sum_{nk}E_nr_k\pi_{nk}.
+ \label{eq:physicaloverlap}
+\end{equation}
+
+\subsection{Conexão com o cálculo pelo potencial}
+Na evolução unitária deste texto, ponha $U_0=e^{-\ii H_0t/\hbar}$.
+Então $\ket{\phi_k}=U_0U_I\ket k$ e $r_k=r_k^0$.
+Transformamos também os autovetores de energia:
+\begin{equation}
+ \ket{\nu_n}=U_0^\dagger\ket{e_n},\qquad
+ K:=U_0^\dagger HU_0=H_0+\lambda V_I,\qquad
+ d_{nk}=\bra{\nu_n}U_I\ket k.
+ \label{eq:K}
+\end{equation}
+$K$ é o observável energia transformado; o gerador da evolução de
+$U_I$ continua sendo $\lambda V_I$, não $K$.
+
+Para obter $d_{nk}$ precisamos incluir a mudança da base de energia.
+Em dimensão finita, supondo $\epsilon_n$ não degenerados, escrevemos
+\begin{align}
+ E_n&=\epsilon_n+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}
+       +O(\lambda^3),\nonumber\\
+ \ket{\nu_n}&=\ket n+\lambda\ket{\nu_n^{(1)}}
+                   +\lambda^2\ket{\nu_n^{(2)}}+O(\lambda^3).
+ \label{eq:energyseries}
+\end{align}
+Fixamos a fase escolhendo $\langle n|\nu_n\rangle$ real e positivo.
+Com $v_{mn}=\bra m V_I\ket n$ e $\Delta_{nm}=\epsilon_n-\epsilon_m$,
+a equação $K\ket{\nu_n}=E_n\ket{\nu_n}$ fornece
+\begin{align}
+ (H_0-\epsilon_n)\ket{\nu_n^{(1)}}
+   &=-(V_I-E_n^{(1)})\ket n,\nonumber\\
+ (H_0-\epsilon_n)\ket{\nu_n^{(2)}}
+   &=-(V_I-E_n^{(1)})\ket{\nu_n^{(1)}}+E_n^{(2)}\ket n.
+ \label{eq:eigenrecurrence}
+\end{align}
+Projetando em $\bra n$ e $\bra m$, e impondo normalização,
+\begin{align}
+ E_n^{(1)}&=v_{nn},&
+ E_n^{(2)}&=\sum_{m\ne n}\frac{|v_{mn}|^2}{\Delta_{nm}},
+ \label{eq:Ecoeff}\\
+ a_{mn}&=\frac{v_{mn}}{\Delta_{nm}},&
+ \eta_n&=\sum_{m\ne n}|a_{mn}|^2,\nonumber\\
+ b_{mn}&=\sum_{\ell\ne n}
+ \frac{v_{m\ell}v_{\ell n}}{\Delta_{nm}\Delta_{n\ell}}
+ -\frac{v_{nn}v_{mn}}{\Delta_{nm}^2},\qquad m\ne n,
+ \label{eq:ab}\\
+ \ket{\nu_n^{(1)}}&=\sum_{m\ne n}a_{mn}\ket m,\qquad&
+ \ket{\nu_n^{(2)}}&=\sum_{m\ne n}b_{mn}\ket m-\frac{\eta_n}{2}\ket n.
+ \label{eq:energyvectors}
+\end{align}
+O termo longitudinal $-\eta_n/2$ assegura
+$2\operatorname{Re}\langle n|\nu_n^{(2)}\rangle+
+\langle\nu_n^{(1)}|\nu_n^{(1)}\rangle=0$.
+
+Multiplicando a expansão do bra de energia pela do propagador,
+\begin{align}
+ d_{nk}^{(0)}&=S_{nk},\nonumber\\
+ d_{nk}^{(1)}&=c_{nk}^{(1)}
+                  +\sum_{m\ne n}a_{mn}^*S_{mk},\nonumber\\
+ d_{nk}^{(2)}&=c_{nk}^{(2)}
+          +\sum_{m\ne n}a_{mn}^*c_{mk}^{(1)}
+          +\sum_{m\ne n}b_{mn}^*S_{mk}
+          -\frac{\eta_n}{2}S_{nk}.
+ \label{eq:dcoeff}
+\end{align}
+Assim, o cálculo de $c^{(2)}$ pelo potencial é reutilizado, e não
+substituído. A evolução dos autovetores da densidade já está em $U_I$;
+as parcelas adicionais vêm da base do Hamiltoniano completo.
+Aplicando a mesma multiplicação da Eq.~\eqref{eq:product},
+\begin{equation}
+ \boxed{\begin{aligned}
+ \pi_{nk}^{(0)}&=|S_{nk}|^2,\\
+ \pi_{nk}^{(1)}&=2\operatorname{Re}(S_{nk}^*d_{nk}^{(1)}),\\
+ \pi_{nk}^{(2)}&=|d_{nk}^{(1)}|^2+
+ \textcolor{blue}{2\operatorname{Re}(S_{nk}^*d_{nk}^{(2)})}.
+ \end{aligned}}
+ \label{eq:piphysical}
+\end{equation}
+Se $[H_0,V(t)]=0$ e não houver cruzamentos, a base de energia pode
+ser mantida fixa e $d_{nk}=c_{nk}$.
+Em geral, usar $p_{nk}=|c_{nk}|^2$ no lugar de $\pi_{nk}$ excluiria
+as correções da base de energia.
+
+\subsection{Derivadas necessárias}
+A derivação das integrais de Dyson fornece
+\begin{align}
+ \dot c_{nk}^{(1)}&=-\frac{\ii}{\hbar}\bra nV_I(t)\ket k,\nonumber\\
+ \dot c_{nk}^{(2)}&=-\frac{\ii}{\hbar}
+                         \sum_m v_{nm}(t)c_{mk}^{(1)}(t).
+ \label{eq:cdot}
+\end{align}
+Os demais coeficientes são funções instantâneas do potencial:
+\begin{align}
+ \dot v_{mn}
+ &=e^{\ii(\epsilon_m-\epsilon_n)t/\hbar}
+   \left[\dot V^S_{mn}
+       +\frac{\ii(\epsilon_m-\epsilon_n)}{\hbar}V^S_{mn}\right],
+ \label{eq:vdot}\\
+ \dot E_n^{(1)}&=\dot v_{nn},\qquad
+ \dot E_n^{(2)}=2\operatorname{Re}
+          \sum_{m\ne n}\frac{v_{mn}^*\dot v_{mn}}{\Delta_{nm}},\nonumber\\
+ \dot a_{mn}&=\frac{\dot v_{mn}}{\Delta_{nm}},\qquad
+ \dot\eta_n=2\operatorname{Re}\sum_{m\ne n}a_{mn}^*\dot a_{mn},\nonumber\\
+ \dot b_{mn}&=\sum_{\ell\ne n}
+ \frac{\dot v_{m\ell}v_{\ell n}+v_{m\ell}\dot v_{\ell n}}
+      {\Delta_{nm}\Delta_{n\ell}}
+ -\frac{\dot v_{nn}v_{mn}+v_{nn}\dot v_{mn}}{\Delta_{nm}^2}.
+ \label{eq:abdot}
+\end{align}
+Como $S_{nk}$ é constante,
+\begin{align}
+ \dot d_{nk}^{(1)}&=\dot c_{nk}^{(1)}
+                     +\sum_{m\ne n}\dot a_{mn}^*S_{mk},\nonumber\\
+ \dot d_{nk}^{(2)}&=\dot c_{nk}^{(2)}
+ +\sum_{m\ne n}\big(\dot a_{mn}^*c_{mk}^{(1)}
+                         +a_{mn}^*\dot c_{mk}^{(1)}\big)
+ +\sum_{m\ne n}\dot b_{mn}^*S_{mk}
+ -\frac{\dot\eta_n}{2}S_{nk}.
+ \label{eq:ddot}
+\end{align}
+As derivadas de $\pi$ são, antes de qualquer simplificação,
+\begin{align}
+ \dot\pi_{nk}^{(0)}
+ &=2\operatorname{Re}(d_{nk}^{(0)*}\dot d_{nk}^{(0)}),\nonumber\\
+ \dot\pi_{nk}^{(1)}
+ &=2\operatorname{Re}(\dot d_{nk}^{(0)*}d_{nk}^{(1)}
+                     +d_{nk}^{(0)*}\dot d_{nk}^{(1)}),\nonumber\\
+ \dot\pi_{nk}^{(2)}
+ &=2\operatorname{Re}(d_{nk}^{(1)*}\dot d_{nk}^{(1)}
+             +\dot d_{nk}^{(0)*}d_{nk}^{(2)}
+             +d_{nk}^{(0)*}\dot d_{nk}^{(2)}).
+ \label{eq:pidot}
+\end{align}
+No problema atual, $\dot d_{nk}^{(0)}=0$.
+Além da condição temporal de Dyson, a expansão da base requer
+$|\lambda|\|V_I(t)\|$ pequeno frente aos gaps de $H_0$.
+Cruzamentos e degenerescências exigem tratamento por subespaços.
+
+\section{Calor, trabalho e energia coerente de Bertúlio}
+Adotamos a convenção de Bernardo~\cite{Bernardo2020}:
+\begin{align}
+ \dot Q&=\sum_{nk}E_n\dot r_k\pi_{nk},&
+ \dot W&=\sum_{nk}\dot E_nr_k\pi_{nk},&
+ \dot C&=\sum_{nk}E_nr_k\dot\pi_{nk}.
+ \label{eq:bernardo}
+\end{align}
+Adotamos o sinal positivo para o trabalho recebido pelo sistema;
+$C$ é uma contribuição energética, não uma medida de coerência.
+Como $\mathcal U=\sum_{nk}E_nr_k\pi_{nk}$, a regra do produto dá
+$\dot{\mathcal U}=\dot Q+\dot W+\dot C$.
+Não identificamos $\dot W$ automaticamente com $\Tr(\rho\dot H)$.
+
+\subsection{Organização dos produtos}
+Para explicitar todas as parcelas, consideramos séries espectrais
+\begin{align}
+ E_n&=E_n^{(0)}+\lambda E_n^{(1)}
+                      +\lambda^2E_n^{(2)}+O(\lambda^3),\nonumber\\
+ r_k&=r_k^{(0)}+\lambda r_k^{(1)}
+                      +\lambda^2r_k^{(2)}+O(\lambda^3),\nonumber\\
+ \pi_{nk}&=\pi_{nk}^{(0)}+\lambda\pi_{nk}^{(1)}
+                      +\lambda^2\pi_{nk}^{(2)}+O(\lambda^3).
+ \label{eq:allseries}
+\end{align}
+Nesta subseção os coeficientes podem depender do tempo.
+Isso permite organizar a expansão geral antes de impor a unitariedade
+do problema atual. Não estamos ainda calculando uma dinâmica reduzida.
+Mantemos $\lambda$ constante no tempo; o protocolo temporal está
+nos coeficientes. As séries e suas primeiras derivadas devem admitir
+restos $O(\lambda^3)$ no intervalo considerado.
+
+Para quaisquer três fatores $A,B,D$, o produto é
+\begin{align}
+ ABD={}&A^{(0)}B^{(0)}D^{(0)}\nonumber\\
+ &+\lambda\big[A^{(1)}B^{(0)}D^{(0)}
+              +A^{(0)}B^{(1)}D^{(0)}
+              +A^{(0)}B^{(0)}D^{(1)}\big]\nonumber\\
+ &+\lambda^2\big[A^{(2)}B^{(0)}D^{(0)}
+              +A^{(0)}B^{(2)}D^{(0)}
+              +A^{(0)}B^{(0)}D^{(2)}\nonumber\\
+ &\hspace{25mm}+A^{(1)}B^{(1)}D^{(0)}
+              +A^{(1)}B^{(0)}D^{(1)}
+              +A^{(0)}B^{(1)}D^{(1)}\big]+O(\lambda^3).
+ \label{eq:triple}
+\end{align}
+Há uma parcela na ordem zero, três na primeira e seis na segunda.
+Para o calor usamos $(A,B,D)=(E,\dot r,\pi)$;
+para o trabalho, $(\dot E,r,\pi)$; para $C$, $(E,r,\dot\pi)$.
+
+\subsection{Calor: ordens zero, primeira e segunda}
+Substituindo as séries na primeira Eq.~\eqref{eq:bernardo},
+\begin{align}
+ \dot Q^{(0)}
+ &=\sum_{nk}E_n^{(0)}\dot r_k^{(0)}\pi_{nk}^{(0)},\label{eq:Q0}\\
+ \dot Q^{(1)}
+ &=\sum_{nk}\big[
+ E_n^{(1)}\dot r_k^{(0)}\pi_{nk}^{(0)}
+ +E_n^{(0)}\dot r_k^{(1)}\pi_{nk}^{(0)}
+ +E_n^{(0)}\dot r_k^{(0)}\pi_{nk}^{(1)}\big],\label{eq:Q1}\\
+ \dot Q^{(2)}
+ &=\sum_{nk}\big[
+ E_n^{(2)}\dot r_k^{(0)}\pi_{nk}^{(0)}
+ +E_n^{(0)}\dot r_k^{(2)}\pi_{nk}^{(0)}
+ +E_n^{(0)}\dot r_k^{(0)}\pi_{nk}^{(2)}\nonumber\\
+ &\hspace{16mm}
+ +E_n^{(1)}\dot r_k^{(1)}\pi_{nk}^{(0)}
+ +E_n^{(1)}\dot r_k^{(0)}\pi_{nk}^{(1)}
+ +E_n^{(0)}\dot r_k^{(1)}\pi_{nk}^{(1)}\big].
+ \label{eq:Q2}
+\end{align}
+
+\subsection{Trabalho: ordens zero, primeira e segunda}
+Agora a derivada atua somente no fator energético:
+\begin{align}
+ \dot W^{(0)}
+ &=\sum_{nk}\dot E_n^{(0)}r_k^{(0)}\pi_{nk}^{(0)},\label{eq:W0}\\
+ \dot W^{(1)}
+ &=\sum_{nk}\big[
+ \dot E_n^{(1)}r_k^{(0)}\pi_{nk}^{(0)}
+ +\dot E_n^{(0)}r_k^{(1)}\pi_{nk}^{(0)}
+ +\dot E_n^{(0)}r_k^{(0)}\pi_{nk}^{(1)}\big],\label{eq:W1}\\
+ \dot W^{(2)}
+ &=\sum_{nk}\big[
+ \dot E_n^{(2)}r_k^{(0)}\pi_{nk}^{(0)}
+ +\dot E_n^{(0)}r_k^{(2)}\pi_{nk}^{(0)}
+ +\dot E_n^{(0)}r_k^{(0)}\pi_{nk}^{(2)}\nonumber\\
+ &\hspace{16mm}
+ +\dot E_n^{(1)}r_k^{(1)}\pi_{nk}^{(0)}
+ +\dot E_n^{(1)}r_k^{(0)}\pi_{nk}^{(1)}
+ +\dot E_n^{(0)}r_k^{(1)}\pi_{nk}^{(1)}\big].
+ \label{eq:W2}
+\end{align}
+
+\subsection{Energia coerente: ordens zero, primeira e segunda}
+Por fim, a derivada atua somente no overlap ao quadrado:
+\begin{align}
+ \dot C^{(0)}
+ &=\sum_{nk}E_n^{(0)}r_k^{(0)}\dot\pi_{nk}^{(0)},\label{eq:C0}\\
+ \dot C^{(1)}
+ &=\sum_{nk}\big[
+ E_n^{(1)}r_k^{(0)}\dot\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(1)}\dot\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(0)}\dot\pi_{nk}^{(1)}\big],\label{eq:C1}\\
+ \dot C^{(2)}
+ &=\sum_{nk}\big[
+ E_n^{(2)}r_k^{(0)}\dot\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(2)}\dot\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(0)}\dot\pi_{nk}^{(2)}\nonumber\\
+ &\hspace{16mm}
+ +E_n^{(1)}r_k^{(1)}\dot\pi_{nk}^{(0)}
+ +E_n^{(1)}r_k^{(0)}\dot\pi_{nk}^{(1)}
+ +E_n^{(0)}r_k^{(1)}\dot\pi_{nk}^{(1)}\big].
+ \label{eq:C2}
+\end{align}
+A derivada de $\pi^{(2)}$ inclui a derivada do termo cruzado
+$2\operatorname{Re}(d^{(0)*}d^{(2)})$, conforme a
+Eq.~\eqref{eq:pidot}; não basta derivar $|d^{(1)}|^2$.
+
+\subsection{Quantidades acumuladas e verificação da primeira lei}
+Para $F=Q,W,C$, as expressões anteriores são taxas. As energias
+acumuladas, com valor inicial zero, são
+\begin{equation}
+ F^{(j)}(t)=\int_0^t\dot F^{(j)}(s)\,\dd s,\qquad
+ F(t)=F^{(0)}(t)+\lambda F^{(1)}(t)
+                    +\lambda^2F^{(2)}(t)+O(\lambda^3).
+ \label{eq:integrated}
+\end{equation}
+Da mesma regra de multiplicação,
+\begin{align}
+ \mathcal U^{(0)}
+ &=\sum_{nk}E_n^{(0)}r_k^{(0)}\pi_{nk}^{(0)},\nonumber\\
+ \mathcal U^{(1)}
+ &=\sum_{nk}\big[E_n^{(1)}r_k^{(0)}\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(1)}\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(0)}\pi_{nk}^{(1)}\big],\nonumber\\
+ \mathcal U^{(2)}
+ &=\sum_{nk}\big[E_n^{(2)}r_k^{(0)}\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(2)}\pi_{nk}^{(0)}
+ +E_n^{(0)}r_k^{(0)}\pi_{nk}^{(2)}\nonumber\\
+ &\hspace{16mm}+E_n^{(1)}r_k^{(1)}\pi_{nk}^{(0)}
+ +E_n^{(1)}r_k^{(0)}\pi_{nk}^{(1)}
+ +E_n^{(0)}r_k^{(1)}\pi_{nk}^{(1)}\big].
+ \label{eq:Ucoeff}
+\end{align}
+Ao derivar cada produto, os termos com $\dot E$ reproduzem
+$\dot W^{(j)}$, os com $\dot r$ reproduzem $\dot Q^{(j)}$,
+e os com $\dot\pi$ reproduzem $\dot C^{(j)}$.
+Assim, para $j=0,1,2$,
+\begin{equation}
+ \boxed{\dot{\mathcal U}^{(j)}
+ =\dot Q^{(j)}+\dot W^{(j)}+\dot C^{(j)},\qquad
+ \mathcal U^{(j)}(t)-\mathcal U^{(j)}(0)
+ =Q^{(j)}+W^{(j)}+C^{(j)}.}
+ \label{eq:orderlaw}
+\end{equation}
+Não se deve identificar $\mathcal U^{(j)}(t)$ com sua variação
+sem subtrair o valor inicial.
+
+\section{Resultado para a dinâmica unitária já calculada}
+Neste estágio, $\rho(0)$ é independente de $\lambda$ e
+\begin{equation}
+ \rho(t)=U_0U_I\rho(0)U_I^\dagger U_0^\dagger,\qquad
+ r_k^{(0)}=r_k^0,\quad r_k^{(1)}=r_k^{(2)}=0.
+ \label{eq:unitaryr}
+\end{equation}
+Todos os $\dot r_k^{(j)}$ são nulos.
+Além disso, $E_n^{(0)}=\epsilon_n$ e
+$\pi_{nk}^{(0)}=|S_{nk}|^2$ são constantes.
+Substituir essas condições nas expressões gerais fornece,
+sem hipóteses sobre a coincidência das bases,
+\begin{align}
+ \dot Q^{(0)}&=\dot Q^{(1)}=\dot Q^{(2)}=0,\label{eq:unitaryQ}\\
+ \dot W^{(0)}&=0,\nonumber\\
+ \dot W^{(1)}&=\sum_{nk}r_k^0\dot E_n^{(1)}\pi_{nk}^{(0)},\nonumber\\
+ \dot W^{(2)}&=\sum_{nk}r_k^0\left[
+     \dot E_n^{(2)}\pi_{nk}^{(0)}
+    +\dot E_n^{(1)}\pi_{nk}^{(1)}\right],\label{eq:unitaryW}\\
+ \dot C^{(0)}&=0,\nonumber\\
+ \dot C^{(1)}&=\sum_{nk}r_k^0\epsilon_n\dot\pi_{nk}^{(1)},\nonumber\\
+ \dot C^{(2)}&=\sum_{nk}r_k^0\left[
+       \epsilon_n\dot\pi_{nk}^{(2)}
+       +E_n^{(1)}\dot\pi_{nk}^{(1)}\right].
+ \label{eq:unitaryC}
+\end{align}
+As Eqs.~\eqref{eq:Ecoeff}--\eqref{eq:pidot} fornecem todos os
+coeficientes e derivadas dessas taxas em termos do potencial.
+
+Integrando, com $[f]_0^t:=f(t)-f(0)$,
+\begin{align}
+ Q^{(j)}&=0\quad(j=0,1,2),\qquad W^{(0)}=C^{(0)}=0,\nonumber\\
+ W^{(1)}(t)&=\sum_{nk}r_k^0\pi_{nk}^{(0)}[E_n^{(1)}]_0^t,\nonumber\\
+ W^{(2)}(t)&=\sum_{nk}r_k^0\left\{
+ \pi_{nk}^{(0)}[E_n^{(2)}]_0^t+
+ \int_0^t\dot E_n^{(1)}(s)\pi_{nk}^{(1)}(s)\,\dd s\right\},\nonumber\\
+ C^{(1)}(t)&=\sum_{nk}r_k^0\epsilon_n[\pi_{nk}^{(1)}]_0^t,\nonumber\\
+ C^{(2)}(t)&=\sum_{nk}r_k^0\left\{
+ \epsilon_n[\pi_{nk}^{(2)}]_0^t+
+ \int_0^t E_n^{(1)}(s)\dot\pi_{nk}^{(1)}(s)\,\dd s\right\}.
+ \label{eq:unitaryintegrals}
+\end{align}
+Embora $c^{(1)}(0)=c^{(2)}(0)=0$, as correções de $d(0)$ e
+$\pi(0)$ não precisam ser nulas quando $V(0)\ne0$, pois a base
+de energia também se altera. Por isso os termos iniciais foram mantidos.
+
+Para conferir explicitamente a segunda ordem, somamos as duas últimas
+contribuições pertinentes:
+\begin{align}
+ W^{(2)}+C^{(2)}
+ &=\sum_{nk}r_k^0\left\{
+ \pi_{nk}^{(0)}[E_n^{(2)}]_0^t
+ +\epsilon_n[\pi_{nk}^{(2)}]_0^t
+ +\int_0^t\frac{\dd}{\dd s}
+       \big(E_n^{(1)}\pi_{nk}^{(1)}\big)\,\dd s\right\}\nonumber\\
+ &=\sum_{nk}r_k^0
+ \left[E_n^{(2)}\pi_{nk}^{(0)}
+       +E_n^{(1)}\pi_{nk}^{(1)}
+       +\epsilon_n\pi_{nk}^{(2)}\right]_0^t
+ =\Delta\mathcal U^{(2)}.
+ \label{eq:unitarycheck}
+\end{align}
+Na ordem um, analogamente,
+$W^{(1)}+C^{(1)}
+=\sum_{nk}r_k^0[E_n^{(1)}\pi_{nk}^{(0)}
++\epsilon_n\pi_{nk}^{(1)}]_0^t
+=\Delta\mathcal U^{(1)}$.
+
+Como o mesmo $H$ gera a evolução unitária,
+$\Tr(H\dot\rho)=-\ii\Tr(H[H,\rho])/\hbar=0$.
+Portanto,
+\begin{equation}
+ \dot W+\dot C=\dot{\mathcal U}=\Tr(\rho\dot H).
+ \label{eq:drivingpower}
+\end{equation}
+Isso não torna $\dot W$ isoladamente igual à potência de controle.
+Também não transforma redistribuição de populações em calor espectral:
+o calor definido na Eq.~\eqref{eq:bernardo} depende dos autovalores de
+$\rho$, que aqui não variam. As fórmulas gerais de $Q^{(0,1,2)}$
+já estão organizadas; sua avaliação numa dinâmica reduzida será feita
+na próxima etapa, sem reaproveitar automaticamente os autovalores
+constantes ou os autovetores unitariamente evoluídos do sistema fechado.

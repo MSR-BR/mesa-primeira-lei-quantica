@@ -1,0 +1,96 @@
+name: Publicar artigo e PDF
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pdf_request:
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: article-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.build.outputs.version }}
+      pdf: ${{ steps.build.outputs.pdf }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Instalar compiladores
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends latexmk texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended pandoc poppler-utils
+      - name: Validar scripts
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          node --check web/app.js
+      - name: Atualizar mesa ou gerar PDF
+        id: build
+        env:
+          PDF_REQUEST: ${{ inputs.pdf_request }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            previous="$RUNNER_TEMP/previous-pdf"
+            mkdir -p "$previous"
+            tag=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '[.[] | select(.draft == false and (.tag_name | test("^r[0-9]+[.][0-9]+-[a-f0-9]{8}$")))] | first | .tag_name // empty')
+            if [ -n "$tag" ]; then
+              gh release download "$tag" --repo "$GITHUB_REPOSITORY" --dir "$previous" --pattern "article-$tag.pdf" --pattern version.json
+            fi
+            python3 scripts/build.py --site-only --previous-pdf "$previous"
+          else
+            python3 scripts/build.py
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: article-${{ steps.build.outputs.version }}
+          path: site/
+          retention-days: 90
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && vars.PRIVATE_PAGES_ENABLED == 'true'
+        with:
+          path: site/
+  release:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: article-${{ needs.build.outputs.version }}
+          path: site/
+      - name: Registrar versão permanente
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.build.outputs.version }}
+          PDF: ${{ needs.build.outputs.pdf }}
+        run: |
+          gh release create "$VERSION" "site/$PDF" site/version.json --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Artigo · $VERSION" --notes "PDF gerado do commit $GITHUB_SHA. Propostas pendentes não estão incorporadas." --prerelease
+  deploy:
+    if: github.event_name != 'pull_request' && vars.PRIVATE_PAGES_ENABLED == 'true'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar área de trabalho
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Artigo em grupo · Mesa de trabalho</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<aside class="sidebar"><a class="brand" href="#article"><span class="mark">A</span><span><span id="workspace-name">ARTIGO EM GRUPO</span><small>Mesa de trabalho do artigo</small></span></a>
+<div class="workspace-label" id="team-label"></div>
+<nav aria-label="Área de trabalho"><a href="#article" data-view="article"><span>Análise de dados</span></a><a href="#manuscript" data-view="manuscript"><span>Manuscrito</span></a><a href="#revisions" data-view="revisions"><span>Revisões</span></a><a href="#guide" data-view="guide"><span>Como colaborar</span></a></nav>
+
+<div class="sidebar-bottom"><span class="status-dot"></span> Trabalho em elaboração <a id="repo-link" target="_blank" rel="noopener">Abrir no GitHub ↗</a></div></aside>
+<div class="layout"><header class="topbar"><span>ARTIGO / ÁREA DE COLABORAÇÃO</span><div><span id="version" class="version">Carregando…</span></div></header>
+<main id="main" tabindex="-1"><div id="loading" role="status">Carregando a mesa de trabalho…</div>
+<section id="article" class="view" hidden><div class="manuscript-header"><section class="header-card" aria-label="PDF da análise"><div class="action-row"><button id="generate-pdf" type="button" class="button primary">Gerar PDF</button><a id="download-pdf" class="button" href="article.pdf" download>Baixar PDF</a></div><p id="pdf-status" role="status" hidden></p></section><section id="collaboration-account" class="header-card" aria-label="Sua conta para colaborar"></section></div><div id="article-theme" class="eyebrow" hidden></div><h1 id="article-title"></h1><p class="subtitle" id="article-subtitle"></p><div class="byline" id="article-authors"></div>
+
+
+<article class="article-section abstract" id="section-abstract"><div class="section-tools"><button data-edit-section="article/main.tex">Abrir editor</button><a id="abstract-history" target="_blank" rel="noopener">Histórico ↗</a></div><h2>Abstract</h2><p id="abstract-text"></p></article><p class="muted"><strong>Em aprovação coletiva.</strong> Revise as contas até segunda ordem. A dinâmica reduzida será desenvolvida no Codex e incorporada em uma etapa posterior.</p><div id="article-sections"></div>
+</section>
+<section id="manuscript" class="view" hidden>
+<h1>Manuscrito</h1><div id="manuscript-sections"></div></section>
+<section id="revisions" class="view" hidden><h1>Revisões</h1><p id="revisions-status" class="muted" role="status"></p><div id="revision-pdfs" class="revision-pdfs"></div></section>
+<section id="guide" class="view" hidden><div class="eyebrow">TRABALHO EM CONJUNTO</div><h1>Como colaborar</h1><ol class="collaboration-guide"><li>Abra um bloco em <strong>Análise de dados</strong> para sugerir mudanças, editar, consultar referências ou pedir revisão com IA.</li><li>Confira a proposta da IA antes de aceitá-la. Salve o bloco quando estiver pronto. Para atualizar o PDF, use Gerar PDF no cabeçalho.</li><li>Use <strong>Levar para o manuscrito</strong> para copiar o texto do editor e as referências para a seção escolhida.</li><li>Na mesa publicada, entre com GitHub para salvar e compartilhar as alterações com os coautores.</li></ol></section>
+</main><footer>ARTIGO EM GRUPO <span>Histórico preservado. Aprovação humana em cada mudança.</span></footer></div>
+<dialog id="section-editor"><div class="dialog-top"><h2 id="section-editor-title"></h2><button id="close-section-editor" aria-label="Fechar">×</button></div><label for="section-source">Texto da seção (LaTeX)</label><textarea id="section-source" rows="16"></textarea><div class="action-row"><button id="editor-connect" class="button">Entrar com GitHub</button><button id="review-section" class="button">Revisar esta seção com IA</button><button id="accept-review" class="button" hidden>Aceitar no formulário</button><button id="save-section" class="button primary">Salvar seção</button></div><label for="review-focus">Sugestão de mudança ou orientação para a IA</label><input id="review-focus" placeholder="Clareza, coerência, preservar conteúdo e referências"><fieldset class="editor-references"><legend>Referências para este trecho</legend>
+<label for="manual-references">Adicionar referências manualmente</label>
+<textarea id="manual-references" rows="3" maxlength="6000" placeholder="Autor, ano, DOI ou URL e o que a fonte sustenta"></textarea>
+<label for="research-query">Consulta no Research Starter</label>
+<input id="research-query" maxlength="350">
+<button id="research-search" class="button" type="button">Buscar no Research Starter</button>
+<p id="research-status" role="status"></p><div id="research-results"></div><p id="research-selected" role="status"></p>
+</fieldset>
+<details id="manuscript-transfer"><summary>Levar para o manuscrito</summary>
+<form id="transfer-form">
+<label for="transfer-section">Seção de destino</label><select id="transfer-section" required></select>
+<div id="custom-section" hidden>
+<label for="transfer-title">Nome da seção</label><input id="transfer-title" maxlength="100">
+<label for="transfer-position">Posição da seção</label><select id="transfer-position"></select>
+</div>
+<button class="button primary" id="transfer-submit" type="submit">Copiar para o manuscrito</button>
+<p id="transfer-status" role="status"></p>
+</form></details><p id="section-feedback" role="status" aria-live="polite"></p><section id="section-comparison" hidden><h3>Comparação da revisão</h3><p id="review-reason"></p><div class="comparison"><div><h4>Original</h4><pre id="review-original"></pre></div><div><h4>Proposta da IA</h4><pre id="review-proposed"></pre></div></div><h4>Alterações: vermelho removido · verde acrescentado</h4><pre id="review-diff"></pre><button id="discard-review" class="button">Descartar sugestão</button></section></dialog><script src="app.js" defer></script></body></html>

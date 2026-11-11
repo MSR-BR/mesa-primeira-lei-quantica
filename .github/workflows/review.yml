@@ -1,0 +1,52 @@
+name: Revisar artigo com IA
+on:
+  workflow_dispatch:
+    inputs:
+      focus:
+        description: Foco da revisão editorial (em português)
+        required: false
+        default: Coerência, clareza, fundamentação e pendências para finalizar o artigo.
+  issue_comment:
+    types: [created]
+permissions:
+  contents: read
+concurrency:
+  group: editorial-review
+  cancel-in-progress: false
+jobs:
+  review:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (startsWith(github.event.comment.body, '/revisar') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Revisar e abrir proposta para os autores
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/review.py
+      - name: Instalar compiladores para conferir a proposta
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends latexmk texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended pandoc poppler-utils
+      - name: Gerar prévia da proposta (sem publicação)
+        run: |
+          export GITHUB_SHA=$(git rev-parse HEAD)
+          python3 scripts/build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: previa-revisao-ia-${{ github.run_number }}
+          path: site/
+          retention-days: 90
