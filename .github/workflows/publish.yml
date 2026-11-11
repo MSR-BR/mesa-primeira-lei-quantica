@@ -32,7 +32,7 @@ jobs:
       - name: Instalar compiladores
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends latexmk texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended pandoc poppler-utils
+          sudo apt-get install -y --no-install-recommends latexmk lmodern texlive-lang-portuguese texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended pandoc poppler-utils
       - name: Validar scripts
         run: |
           python3 -m unittest discover -s scripts -p 'test_*.py'
