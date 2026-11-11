@@ -23,6 +23,7 @@ jobs:
     outputs:
       version: ${{ steps.build.outputs.version }}
       pdf: ${{ steps.build.outputs.pdf }}
+      generated_pdf: ${{ steps.build.outputs.generated_pdf }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,8 +49,11 @@ jobs:
             tag=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '[.[] | select(.draft == false and (.tag_name | test("^r[0-9]+[.][0-9]+-[a-f0-9]{8}$")))] | first | .tag_name // empty')
             if [ -n "$tag" ]; then
               gh release download "$tag" --repo "$GITHUB_REPOSITORY" --dir "$previous" --pattern "article-$tag.pdf" --pattern version.json
+              python3 scripts/build.py --site-only --previous-pdf "$previous"
+            else
+              python3 scripts/build.py
+              echo "generated_pdf=true" >> "$GITHUB_OUTPUT"
             fi
-            python3 scripts/build.py --site-only --previous-pdf "$previous"
           else
             python3 scripts/build.py
           fi
@@ -59,11 +63,11 @@ jobs:
           path: site/
           retention-days: 90
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request' && vars.PRIVATE_PAGES_ENABLED == 'true'
+        if: github.event_name != 'pull_request' && github.event.repository.private == false
         with:
           path: site/
   release:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && needs.build.outputs.generated_pdf == 'true')
     needs: build
     runs-on: ubuntu-24.04
     permissions:
@@ -81,7 +85,7 @@ jobs:
         run: |
           gh release create "$VERSION" "site/$PDF" site/version.json --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Artigo · $VERSION" --notes "PDF gerado do commit $GITHUB_SHA. Propostas pendentes não estão incorporadas." --prerelease
   deploy:
-    if: github.event_name != 'pull_request' && vars.PRIVATE_PAGES_ENABLED == 'true'
+    if: github.event_name != 'pull_request' && github.event.repository.private == false
     needs: build
     runs-on: ubuntu-24.04
     permissions:
