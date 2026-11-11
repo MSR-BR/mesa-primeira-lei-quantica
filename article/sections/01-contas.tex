@@ -6,7 +6,7 @@
 \newcommand{\dd}{\mathrm d}
 \newcommand{\ii}{\mathrm i}
 \section{Definições e propagador}
-Consideramos $H(t)=H_0+\lambda V(t)$, com $H_0=H_0^\dagger$ independente do tempo,
+\nConsideramos $H(t)=H_0+\lambda V(t)$, com $H_0=H_0^\dagger$ independente do tempo,
 $V(t)=V^\dagger(t)$ e $\lambda$ real e adimensional. As bases
 $\{\ket n\}$ e $\{\ket k\}$ são fixas, independentes de $\lambda$ e
 não precisam coincidir:
@@ -22,7 +22,7 @@ Na representação de interação,
  \label{eq:evolution}
 \end{equation}
 Integrando sucessivamente a equação de movimento
-(série de Dyson~\cite{MIT2017Dyson}), obtemos
+(série de Dyson~\cite{Reis2025Quantum}), obtemos
 \begin{align}
  U_I(t)={}&\I-\frac{\ii\lambda}{\hbar}\int_0^t V_I(t_1)\,\dd t_1
  \nonumber\\
@@ -31,9 +31,7 @@ Integrando sucessivamente a equação de movimento
  V_I(t_1)V_I(t_2)+O(\lambda^3).
  \label{eq:Dyson}
 \end{align}
-O produto mantém a ordenação temporal: $t_1\geq t_2$.
-
-\section{Coeficientes da amplitude}
+O produto mantém a ordenação temporal: $t_1\geq t_2$.\n\n\section{Coeficientes da amplitude}
 Mantendo a definição do original,
 \begin{equation}
  c_{nk}(t)=\bra n U_I(t)\ket k
